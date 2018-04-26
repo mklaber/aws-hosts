@@ -2,6 +2,7 @@
 
 const program = require('commander');
 const pkg = require('./package');
+const chalk = require('chalk');
 const url = require('url');
 const ipPattern = /^ip\-(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\-(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\-(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\-(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9]?[0-9])\.[a-z\-\d]*\.compute\.internal$/;
 
@@ -16,7 +17,7 @@ program
   .action((internalAwsUrl) => {
     let host = url.parse(internalAwsUrl).hostname;
     if (!host || !ipPattern.test(host)) {
-      console.error(`Could not find an internal aws host in "${internalAwsUrl}"`);
+      console.error(chalk.red(`Could not find an internal aws host in "${internalAwsUrl}"`));
       program.outputHelp();
       process.exit(1);
     }
@@ -28,3 +29,7 @@ program
   })
   .parse(process.argv);
 
+
+if (!process.argv.slice(2).length) {
+  program.outputHelp();
+}
